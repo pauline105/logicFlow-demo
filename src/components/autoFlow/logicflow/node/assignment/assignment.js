@@ -10,8 +10,8 @@ export const Assigntype = 'assignNode'
 export class AssignNodeModel extends HtmlNodeModel {
   setAttributes () {
     this.text.editable = false
-    const width = 33
-    const height = 33
+    const width = 55
+    const height = 75
     this.width = width
     this.height = height
     this.anchorsOffset = [

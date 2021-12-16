@@ -7,7 +7,7 @@
       <i class="iconfont icon-youshuangjiantou"></i>
     </div>
     <div>
-      <div @click="forward">
+      <div @click="amplification">
         <el-tooltip
           class="item"
           content="放大"
@@ -17,7 +17,7 @@
           <i class="iconfont icon-add"></i>
         </el-tooltip>
       </div>
-      <div @click="neat">
+      <div @click="narrow">
         <el-tooltip
           class="item"
           content="缩小"
@@ -27,7 +27,7 @@
           <i class="iconfont icon-hr"></i>
         </el-tooltip>
       </div>
-      <div>
+      <div @click="neat">
         <el-tooltip
           class="item"
           content="重置缩放比列为100%"
@@ -45,7 +45,7 @@
       </el-tooltip>
     </div>
     <div>
-      <el-tooltip class="item" content="收起" effect="dark" placement="bottom">
+      <el-tooltip class="item" content="校验" effect="dark" placement="bottom">
         <i class="iconfont icon-yiwanchengjiedian"></i>
       </el-tooltip>
     </div>
@@ -99,80 +99,79 @@
 </template>
 
 <script>
-import { defineComponent, reactive, toRefs, ref } from 'vue'
-import LogicFlow from '@logicflow/core'
-import { Snapshot } from '@logicflow/extension'
-import { WorkArea } from '../../logicflow/index.js'
+  import { defineComponent } from 'vue'
+  import LogicFlow from '@logicflow/core'
+  import { Snapshot } from '@logicflow/extension'
+  import { WorkArea } from '../../logicflow/index.js'
+  import { reactive, toRefs, ref } from 'vue'
 
-LogicFlow.use(Snapshot)
-export default defineComponent({
-  name: 'Control',
-  props: {
-    lf: {
-      type: Object || String,
-      default: () => {}
-    }
-  },
-  emits: ['cat-data', 'setPercentage'],
-  setup (prop, context) {
-    const formRef = ref(null)
-    const state = reactive({
-      // 控制面板展开与否
-      show: false,
-      // 弹窗
-      dialogVisible: false,
-      // 弹窗表单
-      form: {
-        name: '',
-        key: '',
-        describe: '',
-        admin: ''
+  LogicFlow.use(Snapshot)
+  export default defineComponent({
+    name: 'Control',
+    props: {
+      lf: {
+        type: Object || String,
+        default: () => {},
       },
-      // 表单验证
-      rules: {
-        name: [
-          { required: true, message: '请输入流程名称', trigger: 'blur' }
-        ],
-        key: [{ required: true, message: '请输入API Key', trigger: 'blur' }]
+    },
+    emits: ['cat-data', 'setPercentage'],
+    setup(prop, context) {
+      const formRef = ref(null)
+      const state = reactive({
+        // 控制面板展开与否
+        show: false,
+        // 弹窗
+        dialogVisible: false,
+        // 弹窗表单
+        form: {
+          name: '',
+          key: '',
+          describe: '',
+          admin: '',
+        },
+        // 表单验证
+        rules: {
+          name: [
+            { required: true, message: '请输入流程名称', trigger: 'blur' },
+          ],
+          key: [{ required: true, message: '请输入API Key', trigger: 'blur' }],
+        },
+      })
+
+      // 点击放大
+      const amplification = () => {
+        WorkArea.lf.zoom(true)
       }
-    })
-    // 后退
-    const back = () => {
-      WorkArea.lf.undo()
-    }
-    // 前进
-    const forward = () => {
-      WorkArea.lf.redo()
-    }
-    //  导出
-    const download = () => {
-      WorkArea.lf.getSnapshot()
-    }
-    // 排齐
-    const neat = () => {
-      WorkArea.lf.resetZoom()
-      WorkArea.lf.resetTranslate()
-      editPercentage()
-    }
-    const ww = () => {
-      console.log(WorkArea.lf.getTransform())
-    }
-    const editPercentage = () => {
-      context.emit('setPercentage')
-    }
-    return {
-      ...toRefs(state),
-      formRef,
-      WorkArea,
-      back,
-      forward,
-      download,
-      neat,
-      ww,
-      editPercentage
-    }
-  }
-})
+      // 点击缩小
+      const narrow = () => {
+        WorkArea.lf.zoom(false)
+      }
+      // 排齐
+      const neat = () => {
+        WorkArea.lf.resetZoom()
+        WorkArea.lf.focusOn()
+      }
+      //  导出
+      const download = () => {
+        WorkArea.lf.getSnapshot()
+      }
+
+      const ww = () => {
+        console.log(WorkArea.lf.getTransform())
+      }
+
+      return {
+        ...toRefs(state),
+        formRef,
+        WorkArea,
+        narrow,
+        amplification,
+        download,
+        neat,
+        ww,
+      }
+    },
+  })
 </script>
 <style scoped lang="scss">
   .vab-control {

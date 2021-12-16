@@ -1,31 +1,56 @@
 <template>
   <div class="assign-node">
-    <i class="iconfont icon-cuowuguanbiquxiao"></i>
-    <span>排它开关</span>
+    <div>
+      <i class="iconfont icon-cuowuguanbiquxiao"></i>
+    </div>
+    <span>{{ form.gatewayName }}</span>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    form: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
   .assign-node {
-    i {
-      font-size: 18px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    > div {
+      margin-top: 8px;
+      transform: rotate(45deg);
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #fff;
-      width: 33px;
-      height: 33px;
+      width: 55px;
+      height: 55px;
       background-color: #fa6934;
+      i {
+        transform: rotate(45deg);
+        font-size: 28px;
+      }
     }
+
     span {
-      margin-top: 4px;
-      font-size: 14px;
-      color: #f3f3f3;
+      position: absolute;
+      top: 67px;
+      left: 8px;
+      margin: 0;
+      font-size: 12px;
+      z-index: 99;
     }
   }
 </style>

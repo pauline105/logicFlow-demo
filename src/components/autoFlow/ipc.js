@@ -2,27 +2,25 @@ import { ref, reactive } from 'vue'
 import { WorkArea } from './logicflow'
 export class InputIpc {
   // 自动节点事件
-  static handleInput () {
+  static handleInput() {
     if (CurrentSelectNode.nodeData) {
       // 通过节点id 设置name属性值
       WorkArea.lf.setProperties(CurrentSelectNode.nodeData.id, {
-        form: { name: '', event: '', type: '', user: '' }
+        form: { event: '', type: '', user: '' },
       })
     }
   }
-
   // 赋值节点事件
-  static assignHandle () {
+  static assignHandle() {
     if (CurrentSelectNode.nodeData) {
       // 通过节点id 设置name属性值
       WorkArea.lf.setProperties(CurrentSelectNode.nodeData.id, {
-        form: { name: '', APIname: '', describe: '' }
+        form: { name: '', APIname: '', describe: '' },
       })
     }
   }
-
   // 循环节点事件
-  static cycleHandle () {
+  static cycleHandle() {
     if (CurrentSelectNode.nodeData) {
       // 通过节点id 设置name属性值
       WorkArea.lf.setProperties(CurrentSelectNode.nodeData.id, {
@@ -33,14 +31,13 @@ export class InputIpc {
           variable: '',
           direction: '',
           cursor: '',
-          conditions: ''
-        }
+          conditions: '',
+        },
       })
     }
   }
-
   // 查询记录事件
-  static recordHandle () {
+  static recordHandle() {
     if (CurrentSelectNode.nodeData) {
       // 通过节点id 设置name属性值
       WorkArea.lf.setProperties(CurrentSelectNode.nodeData.id, {
@@ -54,21 +51,20 @@ export class InputIpc {
           rules: '',
           way: '',
           number: '',
-          isNull: false
-        }
+          isNull: false,
+        },
       })
     }
   }
-
   // 排它事件
-  static gatewayHandle () {
+  static gatewayHandle() {
     if (CurrentSelectNode.nodeData) {
       // 通过节点id 设置name属性值
       WorkArea.lf.setProperties(CurrentSelectNode.nodeData.id, {
         form: {
           gatewayName: '',
-          senior: false
-        }
+          senior: false,
+        },
       })
     }
   }
@@ -79,12 +75,16 @@ export class CurrentSelectNode {
 }
 
 export class PropertyReadWrite {
+  // 当前点击的节点信息
+  nodeModel = {}
+
   static drawerStatus = reactive({
     nodeDrawer: false,
     assignDrawer: false,
     cycleDrawer: false,
     recordDrawer: false,
-    gatewayDrawer: false
+    gatewayDrawer: false,
+    lineAttr: false,
   })
 
   static option = ref({})
@@ -94,14 +94,13 @@ export class PropertyReadWrite {
     name: '',
     event: '',
     type: '',
-    user: ''
+    user: '',
   })
-
   // 赋值节点抽屉表单数据
   static assignDrawerForm = reactive({
     name: '',
     APIname: '',
-    describe: ''
+    describe: '',
   })
 
   // 循环节点
@@ -113,9 +112,8 @@ export class PropertyReadWrite {
     // 方向
     direction: '',
     cursor: '',
-    conditions: ''
+    conditions: '',
   })
-
   // 查询记录节点
   static recordForm = reactive({
     searchName: '',
@@ -127,13 +125,18 @@ export class PropertyReadWrite {
     rules: '',
     way: '',
     number: '',
-    isNull: false
+    isNull: false,
   })
-
   // 排它节点
   static gatewayForm = reactive({
     gatewayName: '',
-    senior: false
+    senior: false,
+  })
+
+  // 排它网关连线属性
+  static lineAttrForm = reactive({
+    type: '条件分支',
+    name: '',
   })
   /**
    * 属性读写显示

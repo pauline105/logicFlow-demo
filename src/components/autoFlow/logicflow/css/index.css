@@ -1,0 +1,73 @@
+.assign-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.assign-node i {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 55px;
+  height: 55px;
+  font-size: 28px;
+  color: #fff;
+  background-color: #4e80f5;
+  border-radius: 8px;
+}
+
+.assign-node span {
+  font-size: 14px;
+}
+
+.my-node {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 108px;
+  height: 68px;
+  padding: 10px 0;
+  background: #006ae1;
+  border-radius: 34px;
+}
+
+.my-node i {
+  font-size: 24px;
+  color: #fff;
+}
+
+.my-node span {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #f3f3f3;
+}
+
+.auto-node {
+  box-sizing: border-box;
+  width: 122px;
+  height: 82px;
+  background-color: #fff;
+  border: 2px solid #a1bbf7;
+}
+
+.auto-node > div:nth-child(1) {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  padding-left: 8px;
+  background-color: #1d77ff;
+}
+
+.auto-node > div:nth-child(1) i {
+  color: #fff;
+}
+
+.auto-node > div:nth-child(2) {
+  height: 46px;
+  padding: 6px;
+  color: #525252;
+  background-color: #fff;
+}

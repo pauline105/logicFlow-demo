@@ -10,8 +10,8 @@ export const SwitchType = 'switchNode'
 export class SwitchNodeModel extends HtmlNodeModel {
   setAttributes () {
     this.text.editable = false
-    const width = 33
-    const height = 33
+    const width = 72
+    const height = 72
     this.width = width
     this.height = height
     this.anchorsOffset = [
@@ -38,11 +38,11 @@ export class SwitchNodeView extends HtmlNode {
 
   setHtml (rootEl) {
     const { properties } = this.getAttributes()
-    const { name } = properties
+    const { form } = properties
     if (!this.shouldUpdate()) return
     const el = document.createElement('div')
     rootEl.innerHTML = ''
     rootEl.appendChild(el)
-    createApp(switchNode, { name }).mount(el)
+    createApp(switchNode, { form }).mount(el)
   }
 }

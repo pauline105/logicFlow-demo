@@ -10,8 +10,8 @@ export const RecordType = 'recordNode'
 export class RecordNodeModel extends HtmlNodeModel {
   setAttributes () {
     this.text.editable = false
-    const width = 33
-    const height = 33
+    const width = 55
+    const height = 75
     this.width = width
     this.height = height
     this.anchorsOffset = [
@@ -29,18 +29,20 @@ export class RecordNodeView extends HtmlNode {
     if (
       this.currrentProperties &&
       this.currrentProperties === JSON.stringify(properties)
-    ) { return false }
+    ) {
+      return false
+    }
     this.currrentProperties = JSON.stringify(properties)
     return true
   }
 
   setHtml (rootEl) {
     const { properties } = this.getAttributes()
-    const { name } = properties
+    const { form } = properties
     if (!this.shouldUpdate()) return
     const el = document.createElement('div')
     rootEl.innerHTML = ''
     rootEl.appendChild(el)
-    createApp(recordNode, { name }).mount(el)
+    createApp(recordNode, { form }).mount(el)
   }
 }

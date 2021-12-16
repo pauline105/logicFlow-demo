@@ -260,7 +260,7 @@
       <el-scrollbar height="850px">
         <el-form
           class="demo-ruleForm"
-          label-width="100px"
+          label-width="120px"
           :model="PropertyReadWrite.recordForm"
           :rules="recordRules"
         >
@@ -331,7 +331,48 @@
     </div>
   </el-drawer>
 
-  <!-- 排它抽屉 -->
+  <!-- 连线属性抽屉 -->
+  <el-drawer
+    v-model="PropertyReadWrite.drawerStatus.lineAttr"
+    custom-class="lineAttrDrawer"
+    destroy-on-close
+    size="810px"
+    title="连线属性"
+  >
+    <div class="drawer-container">
+      <el-form
+        class="demo-ruleForm"
+        label-width="100px"
+        :model="PropertyReadWrite.lineAttrForm"
+      >
+        <el-form-item label="连线类型">
+          <el-select v-model="PropertyReadWrite.lineAttrForm.type">
+            <el-option label="默认分支" value="默认分支">默认分支</el-option>
+            <el-option label="条件分支" value="条件分支">条件分支</el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="分支名称">
+          <el-input v-model="PropertyReadWrite.lineAttrForm.name" />
+        </el-form-item>
+        <div v-if="PropertyReadWrite.lineAttrForm.type == '条件分支'">
+          <el-form-item label="条件类型">
+            <span>如条件中添加计算型字段可能会影响流程执行速度</span>
+          </el-form-item>
+          <el-form-item>
+            <el-radio v-model="radio1" label="1">满足条件</el-radio>
+            <el-radio v-model="radio1" label="2">公式为真</el-radio>
+          </el-form-item>
+          <AdvancedSearch />
+        </div>
+      </el-form>
+    </div>
+    <div>
+      <el-button type="primary" @click="gatewayHandle">保存</el-button>
+      <el-button>取消</el-button>
+    </div>
+  </el-drawer>
+
+  <!-- 网关抽屉 -->
   <el-drawer
     v-model="PropertyReadWrite.drawerStatus.gatewayDrawer"
     custom-class="gatewayDrawer"
@@ -390,16 +431,30 @@
 </template>
 
 <script>
-import { reactive, toRefs, ref, onMounted } from 'vue'
+import { reactive, toRefs, ref, onMounted, getCurrentInstance } from 'vue'
 import { WorkArea } from './logicflow/index.js'
 import { InputIpc, PropertyReadWrite, CurrentSelectNode } from './ipc.js'
 import Control from './logicflow/conponents/Control.vue'
 export default {
   components: { Control },
   setup () {
+    const { proxy } = getCurrentInstance()
+
     const logContainer = ref(null)
+    // 初始化logicFlow
     onMounted(() => {
       logContainer.value && WorkArea.install(logContainer.value)
+      // 初始化delete键删除
+      document.onkeydown = (e) => {
+        if (e.key === 'Delete') {
+          if (!CurrentSelectNode.nodeModel) {
+            proxy.$msg.message.errorMsg('请选择要删除的节点')
+          } else {
+            WorkArea.lf.deleteNode(CurrentSelectNode.nodeModel.id)
+            return proxy.$msg.message.succesMsg('删除成功')
+          }
+        }
+      }
     })
     const state = reactive({
       activeName: 'first',
@@ -600,8 +655,14 @@ export default {
               }
             }
             > div:nth-child(6) {
-              i {
+              > div {
+                border-radius: 8px;
+                transform: rotate(45deg);
                 background-color: #fa6934 !important;
+              }
+              i {
+                transform: rotate(45deg);
+                background-color: transparent;
               }
             }
             > div:nth-child(7) {
@@ -615,9 +676,15 @@ export default {
       }
     }
 
+    // 这里
     #container {
       width: 100%;
       height: 3600px;
+      :deep(.lf-graph) {
+        foreignObject {
+          overflow: visible !important;
+        }
+      }
     }
   }
 </style>
@@ -718,7 +785,8 @@ export default {
   .assignDrawer,
   .cycleDrawer,
   .recordDrawer,
-  .gatewayDrawer {
+  .gatewayDrawer,
+  .lineAttrDrawer {
     .el-drawer__header {
       border-bottom: 1px solid #eee;
       padding: 0;
